@@ -13,6 +13,8 @@ export function getEmail(user: User) {
 }
 
 export const isAdmin = (user: User) => user && user.isAdmin;
+/** 09/01/2023 added by FK */
+export const isSuperadmin = (user: User) => user && user.isSuperadmin;
 
 /**
  * Check if collaborator can alter permission. User can alter permission if:

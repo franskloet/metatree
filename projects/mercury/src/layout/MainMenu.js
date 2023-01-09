@@ -4,7 +4,8 @@ import {Divider, List, ListItem, ListItemIcon, ListItemText} from "@material-ui/
 import {Assignment, Folder, FolderSpecial, OpenInNew, VerifiedUser} from "@material-ui/icons";
 import ServicesContext from "../common/contexts/ServicesContext";
 import UserContext from "../users/UserContext";
-import {isAdmin} from "../users/userUtils";
+// change from isAdmin to isSuperadmin by FK
+import {isSuperadmin} from "../users/userUtils";
 import MetadataViewContext from "../metadata/views/MetadataViewContext";
 import ExternalStoragesContext from "../external-storage/ExternalStoragesContext";
 import {getExternalStoragePathPrefix} from "../external-storage/externalStorageUtils";
@@ -65,7 +66,7 @@ export default () => {
                         <ListItemText primary="Metadata" />
                     </ListItem>
                 )}
-                {isAdmin(currentUser) && (
+                {isSuperadmin(currentUser) && (
                     <ListItem
                         key="users"
                         component={NavLink}
