@@ -7,7 +7,8 @@ import {MetadataWrapper} from '../metadata/LinkedDataWrapper';
 import LinkedDataEntityPage from "../metadata/common/LinkedDataEntityPage";
 import LinkedDataMetadataProvider from "../metadata/LinkedDataMetadataProvider";
 import CollectionSearchResultList from "../search/SearchResultList";
-import {isAdmin} from "../users/userUtils";
+// FK access to users for superadmin only
+import {isSuperadmin} from "../users/userUtils";
 import UserContext from "../users/UserContext";
 import UserRolesPage from "../users/UserRolesPage";
 import MetadataView from '../metadata/views/MetadataView';
@@ -80,7 +81,7 @@ const BrowserRoutes = () => {
             <Route
                 path="/users"
                 exact
-                render={() => (isAdmin(currentUser) && (<UserRolesPage />))}
+                render={() => (isSuperadmin(currentUser) && (<UserRolesPage />))}
             />
 
             <Redirect to="/browser" />
