@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const CUSTOM_RESOURCE_COLUMNS = ['access', 'path'];
-const RESOURCE_TYPE_COLUMN = `${RESOURCES_VIEW}_type`;
+const RESOURCE_TYPE_COLUMN = `${RESOURCES_VIEW[0]}_type`;
 
 export const MetadataViewTable = (props: MetadataViewTableProperties) => {
     // eslint-disable-next-line
@@ -51,7 +51,8 @@ export const MetadataViewTable = (props: MetadataViewTableProperties) => {
     const {textFiltersObject, setTextFiltersObject} = props;
     const visibleColumns = columns.filter(column => visibleColumnNames.includes(column.name));
     const dataLinkColumn = columns.find(c => c.type === 'dataLink');
-    const isResourcesView = view === RESOURCES_VIEW;
+    // const isResourcesView = view === RESOURCES_VIEW;
+    const isResourcesView = RESOURCES_VIEW.includes(view);
 
     const isCustomResourceColumn = (column: MetadataViewColumn) => (
         isResourcesView && CUSTOM_RESOURCE_COLUMNS.includes(column.name) && column.type === 'Custom'

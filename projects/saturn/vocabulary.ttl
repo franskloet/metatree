@@ -41,6 +41,9 @@ sils:departmentContactPersonName a rdf:Property .
 sils:departmentContactPersonTelephone a rdf:Property .
 sils:departmentContactPersonEmail a rdf:Property .
 
+# added by frans
+sils:departmentDescription a rdf:Property .
+
 sils:Department a rdfs:Class, sh:NodeShape ;
     sh:closed false ;
     sh:description "A division of a large organization such as a government, university, or business, dealing with a specific area of activity." ;
@@ -67,7 +70,8 @@ sils:Department a rdfs:Class, sh:NodeShape ;
         sh:description "The description of the department." ;
         sh:datatype xsd:string ;
         sh:maxCount 1 ;
-        sh:path rdfs:comment ;
+        #sh:path rdfs:comment ;
+        sh:path sils:departmentDescription ;
         sh:order 1
     ],
     [

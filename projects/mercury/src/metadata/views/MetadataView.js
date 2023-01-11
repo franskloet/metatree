@@ -128,12 +128,23 @@ export const MetadataView = (props: MetadataViewProperties) => {
         clearFilter(facetName);
     };
 
+    // const appendCustomColumns = (view: MetadataViewOptions) => {
+    //     if (view.name === RESOURCES_VIEW) {
+    //         return [
+    //             view.columns.find(c => c.name === RESOURCES_VIEW),
+    //             // any custom column here
+    //             ...view.columns.filter(c => c.name !== RESOURCES_VIEW),
+    //         ];
+    //     }
+    //     return view.columns;
+    // };
+
     const appendCustomColumns = (view: MetadataViewOptions) => {
-        if (view.name === RESOURCES_VIEW) {
+        if (RESOURCES_VIEW.includes(view.name)) {
             return [
-                view.columns.find(c => c.name === RESOURCES_VIEW),
+                view.columns.find(c => RESOURCES_VIEW.includes(c.name)),
                 // any custom column here
-                ...view.columns.filter(c => c.name !== RESOURCES_VIEW),
+                ...view.columns.filter(c => !(RESOURCES_VIEW.includes(c.name))),
             ];
         }
         return view.columns;
@@ -197,7 +208,9 @@ export const MetadataView = (props: MetadataViewProperties) => {
             <Grid key={view.name} container item direction="column" justifyContent="flex-start" spacing={1}>
                 <div className={classes.facetHeaders} style={{textTransform: 'uppercase'}}>{view.title}</div>
                 {
-                    facets.map(facet => renderSingleFacet(facet))
+                    // FK, only render unique (by name) facets
+                    [...new Map(facets.map(item => [item.name, item])).values()].map(facet => renderSingleFacet(facet))
+                    // facets.map(facet => renderSingleFacet(facet))
                 }
                 {
                     // location is the collection location, which we will group under resources
@@ -250,8 +263,8 @@ export const MetadataView = (props: MetadataViewProperties) => {
         if (segments[0] === '') {
             return result;
         }
-
-        const pathPrefix = getMetadataViewsPath(RESOURCES_VIEW) + '&context=';
+        // point to the first (the main) view. Multiple Tabs Here ?
+        const pathPrefix = getMetadataViewsPath(RESOURCES_VIEW[0]) + '&context=';
         let path = locationContext;
         segments.reverse().forEach(segment => {
             result.push({label: segment, href: (pathPrefix + encodeURIComponent(path))});
@@ -293,7 +306,10 @@ export const MetadataView = (props: MetadataViewProperties) => {
                     <Grid container direction="row" spacing={1} wrap="nowrap">
                         <Grid item className={classes.facets}>
                             <Grid container item direction="column" justifyContent="flex-start" spacing={1}>
-                                {views.map(view => renderFacets(view))}
+                                { /** views.map(view => renderFacets(view))
+                                  only render facets of first view */
+                                    renderFacets(views[0])
+                                }
                                 {renderFacetConfirmButtons}
                             </Grid>
                         </Grid>
@@ -344,12 +360,24 @@ export const ContextualMetadataView = (props: ContextualMetadataViewProperties) 
         }
     };
 
+    // return (
+    //     <MetadataView
+    //         {...props}
+    //         facets={facets}
+    //         views={views}
+    //         locationContext={currentViewName === RESOURCES_VIEW && locationContext}
+    //         currentViewName={currentViewName}
+    //         filters={filters}
+    //         handleViewChangeRedirect={handleViewChangeRedirect}
+    //     />
+    // );
+
     return (
         <MetadataView
             {...props}
             facets={facets}
             views={views}
-            locationContext={currentViewName === RESOURCES_VIEW && locationContext}
+            locationContext={RESOURCES_VIEW.includes(currentViewName) && locationContext}
             currentViewName={currentViewName}
             filters={filters}
             handleViewChangeRedirect={handleViewChangeRedirect}

@@ -80,7 +80,8 @@ export const DirectoryPage = (props: DirectoryPageProperties) => {
 
     const getBrowserPathPrefix = () => consts.PATH_SEPARATOR + "browser" + consts.PATH_SEPARATOR;
 
-    const getMetadataSearchRedirect = () => `${getMetadataViewsPath()}?${queryString.stringify({view: RESOURCES_VIEW, context: getLocationContext()})}`;
+    // point to the the first resources view (that's the main one)
+    const getMetadataSearchRedirect = () => `${getMetadataViewsPath()}?${queryString.stringify({view: RESOURCES_VIEW[0], context: getLocationContext()})}`;
 
     const getSearchPlaceholder = () => {
         const openedFolderName = openedDirectory.path ? openedDirectory.path.substring(openedDirectory.path.lastIndexOf('/') + 1) : null;
@@ -106,8 +107,12 @@ export const DirectoryPage = (props: DirectoryPageProperties) => {
     // Path for which metadata should be rendered
     const path = (selection.selected.length === 1) ? selection.selected[0] : openedDirectory.path;
 
+    // const showMetadataSearchButton: boolean = (
+    //     views && views.some(v => v.name === RESOURCES_VIEW) && !openedDirectory.isDeleted
+    // );
+
     const showMetadataSearchButton: boolean = (
-        views && views.some(v => v.name === RESOURCES_VIEW) && !openedDirectory.isDeleted
+        views && views.some(v => RESOURCES_VIEW.includes(v.name)) && !openedDirectory.isDeleted
     );
 
     const allowCsvUpload = openedDirectory && openedDirectory.path.length < path.length;

@@ -1,5 +1,5 @@
 views:
-  - name: Resource
+  - name: Files
     title: Files
     itemName: Name
     types:
@@ -16,67 +16,59 @@ views:
         rdfType: https://sils.uva.nl/ontology#Species
         sourceClass: https://sils.uva.nl/ontology#Object
         sourceClassName: Object
-        type: term
-      - name: objectCountry
-        title: Object country
-        source: https://sils.uva.nl/ontology#objectCountry
+        type: term      
+    join:
+      - view: Studies
+        on: https://sils.uva.nl/ontology#study 
+        reverse: true
+        include:
+          - studyTitle
+          - studyGoal               
+  
+  - name: Studies
+    title: Studies
+    itemName: Study    
+    types:
+      - https://sils.uva.nl/ontology#Study      
+    columns:
+      - name: studyTitle
+        title: Study Title
+        source: https://sils.uva.nl/ontology#studyTitle                        
+        type: text     
+      - name: studyGoal
+        title: Study Goal
+        source: https://sils.uva.nl/ontology#studyGoal                
+        type: text     
+    joinColumns:
+      - name: objectSpecies
+        title: Object species
+        source: https://sils.uva.nl/ontology#objectSpecies
+        rdfType: https://sils.uva.nl/ontology#Species
         sourceClass: https://sils.uva.nl/ontology#Object
         sourceClassName: Object
-        type: text
-      - name: objectGenotype
-        title: Object genotype
-        source: https://sils.uva.nl/ontology#objectGenotype
+        type: term    
+    join:
+      - view: Files
+        on: https://sils.uva.nl/ontology#study         
+        include:
+          - externalFileLink
+
+  - name: Departments
+    title: Departments
+    itemName: Department    
+    types:      
+      - https://sils.uva.nl/ontology#Department      
+    columns:
+      - name: department
+        title: Department
+        source: https://sils.uva.nl/ontology#departmentDescription
+        type: text                       
+    joinColumns:
+      - name: objectSpecies
+        title: Object species
+        source: https://sils.uva.nl/ontology#objectSpecies
+        rdfType: https://sils.uva.nl/ontology#Species
         sourceClass: https://sils.uva.nl/ontology#Object
         sourceClassName: Object
-        type: text
-      - name: assayType
-        title: Assay type
-        source: https://sils.uva.nl/ontology#isOfAssayType
-        rdfType: https://sils.uva.nl/ontology#AssayType
-        sourceClass: https://sils.uva.nl/ontology#Assay
-        sourceClassName: Assay
         type: term
-      - name: assaySequenceTechnology
-        title: Sequence technology
-        source: https://sils.uva.nl/ontology#sequenceTechnology
-        rdfType: https://sils.uva.nl/ontology#SequenceTechnology
-        sourceClass: https://sils.uva.nl/ontology#Assay
-        sourceClassName: Assay
-        type: term
-      - name: assayPairedEnd
-        title: Paired end
-        source: https://sils.uva.nl/ontology#pairedEnd
-        sourceClass: https://sils.uva.nl/ontology#Assay
-        sourceClassName: Assay
-        type: boolean
-      - name: LCMSAssayMachineType
-        title: LCMS Machine Type
-        source: https://sils.uva.nl/ontology#LCMSAssayMachineType
-        rdfType: https://sils.uva.nl/ontology#LCMSApparatusType
-        sourceClass: https://sils.uva.nl/ontology#Assay
-        sourceClassName: Assay
-        type: term
-      - name: assayPositiveMode
-        title: Positive mode
-        source: https://sils.uva.nl/ontology#assayPositiveMode
-        sourceClass: https://sils.uva.nl/ontology#Assay
-        sourceClassName: Assay
-        type: boolean
-      - name: assayNegativeMode
-        title: Negative mode
-        source: https://sils.uva.nl/ontology#assayNegativeMode
-        sourceClass: https://sils.uva.nl/ontology#Assay
-        sourceClassName: Assay
-        type: boolean
-      - name: assayMS1
-        title: MS1
-        source: https://sils.uva.nl/ontology#assayMS1
-        sourceClass: https://sils.uva.nl/ontology#Assay
-        sourceClassName: Assay
-        type: boolean
-      - name: assayMS2
-        title: MS2
-        source: https://sils.uva.nl/ontology#assayMS2
-        sourceClass: https://sils.uva.nl/ontology#Assay
-        sourceClassName: Assay
-        type: boolean
+  
