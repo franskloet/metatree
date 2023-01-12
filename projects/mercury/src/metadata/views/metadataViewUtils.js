@@ -19,5 +19,13 @@ export const getMetadataViewsPath = (viewName: string) => {
     return path;
 };
 
+export const getMetadataViewsPathContext = (viewName: string, conText: string) => {
+    let path = '/metadata-views';
+    if (viewName) {
+        path += `?context=${encodeURIComponent(conText)}&view=${viewName}`;
+    }
+    return path;
+};
+
 export const ofRangeValueType: boolean = (type: ValueType) => type === 'Number' || type === 'Date';
 export const ofBooleanValueType: boolean = (type: ValueType) => type === 'Boolean';

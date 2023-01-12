@@ -13,7 +13,7 @@ import MetadataViewContext from "./MetadataViewContext";
 import BreadcrumbsContext from "../../common/contexts/BreadcrumbsContext";
 import {getLocationContextFromString, getMetadataViewNameFromString} from "../../search/searchUtils";
 import type {MetadataViewEntity} from "./metadataViewUtils";
-import {getMetadataViewsPath, ofBooleanValueType, ofRangeValueType, RESOURCES_VIEW} from "./metadataViewUtils";
+import {getMetadataViewsPath, getMetadataViewsPathContext, ofBooleanValueType, ofRangeValueType, RESOURCES_VIEW} from "./metadataViewUtils";
 import MetadataViewActiveFacetFilters from "./MetadataViewActiveFacetFilters";
 import MetadataViewInformationDrawer from "./MetadataViewInformationDrawer";
 import {useSingleSelection} from "../../file/UseSelection";
@@ -356,7 +356,11 @@ export const ContextualMetadataView = (props: ContextualMetadataViewProperties) 
 
     const handleViewChangeRedirect = (viewName) => {
         if (viewName) {
-            history.push(getMetadataViewsPath(viewName));
+            if (locationContext) {
+                history.push(getMetadataViewsPathContext(viewName, locationContext));
+            } else {
+                history.push(getMetadataViewsPath(viewName));
+            }
         }
     };
 
