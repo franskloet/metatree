@@ -69,7 +69,11 @@ export const MetadataViewTable = (props: MetadataViewTableProperties) => {
 
     // eslint-disable-next-line
     const handleResultSingleClick = (iri: string, label: string, linkedFiles: MetadataViewEntity[]) => {
-        // temporary disabled single click, until more relevant information can be shown
+        if (selected && selected.iri === iri) {
+            toggleRow();
+        } else {
+            toggleRow({label, iri, linkedFiles: linkedFiles || []});
+        }
     };
 
     const handleResultDoubleClick = (iri: string) => {
