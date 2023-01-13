@@ -212,6 +212,7 @@ class DirectoryResource extends BaseResource implements FolderResource, Deletabl
         }
     }
 
+    // FK: Check this routine for creating metadata while uploading
     private void uploadMetadata(FileItem file) throws BadRequestException {
         var entityColumn = "DirectoryName";
 

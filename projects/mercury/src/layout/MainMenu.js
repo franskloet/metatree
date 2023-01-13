@@ -5,7 +5,7 @@ import {Assignment, Folder, FolderSpecial, OpenInNew, VerifiedUser} from "@mater
 import ServicesContext from "../common/contexts/ServicesContext";
 import UserContext from "../users/UserContext";
 // change from isAdmin to isSuperadmin by FK
-import {isSuperadmin} from "../users/userUtils";
+import {isSuperadmin, isAdmin} from "../users/userUtils";
 import MetadataViewContext from "../metadata/views/MetadataViewContext";
 import ExternalStoragesContext from "../external-storage/ExternalStoragesContext";
 import {getExternalStoragePathPrefix} from "../external-storage/externalStorageUtils";
@@ -78,6 +78,21 @@ export default () => {
                             <VerifiedUser />
                         </ListItemIcon>
                         <ListItemText primary="Users" />
+                    </ListItem>
+                )}
+
+                {isAdmin(currentUser) && (
+                    <ListItem
+                        key="data"
+                        component={NavLink}
+                        to="/data"
+                        button
+                        selected={pathname.startsWith('/data')}
+                    >
+                        <ListItemIcon>
+                            <VerifiedUser />
+                        </ListItemIcon>
+                        <ListItemText primary="Data" />
                     </ListItem>
                 )}
             </List>
