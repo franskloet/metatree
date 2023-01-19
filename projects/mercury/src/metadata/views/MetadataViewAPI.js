@@ -93,6 +93,21 @@ class MetadataViewAPI {
             .catch(handleHttpError("Failure when retrieving metadata facets."));
     }
 
+    async getViewExportData(cancelToken: CancelTokenSource, viewName: string, page, size, filters: MetadataViewFilter[] = []): Promise<MetadataViewData> {
+        const viewRequest: MetadataViewDataRequest = {
+            view: viewName,
+            filters,
+            page: page + 1, // API endpoint expects 1-base page number
+            size,
+            includeJoinedViews: true
+        };
+        const requestOptions = cancelToken ? {...defaultRequestOptions, cancelToken: cancelToken.token} : defaultRequestOptions;
+
+        return axios.post(metadataViewUrl, viewRequest, requestOptions)
+            .then(extractJsonData)
+            .catch(handleHttpError("Error while fetching export data."));
+    }
+
     getViewData(cancelToken: CancelTokenSource, viewName: string, page, size, filters: MetadataViewFilter[] = []): Promise<MetadataViewData> {
         const viewRequest: MetadataViewDataRequest = {
             view: viewName,

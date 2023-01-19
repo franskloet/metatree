@@ -1,12 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react';
+import {parse} from 'json2csv';
 import _ from 'lodash';
 import {useHistory} from "react-router-dom";
 import {Button, Grid, Typography, withStyles} from '@material-ui/core';
 import Tabs from "@material-ui/core/Tabs";
+import axios from "axios";
 import Tab from "@material-ui/core/Tab";
 import {Assignment, Close} from "@material-ui/icons";
 import styles from "./MetadataView.styles";
 import Facet from './MetadataViewFacetFactory';
+import MetadataViewAPI from "./MetadataViewAPI";
 import type {MetadataViewFacet, MetadataViewFilter, MetadataViewOptions, ValueType} from "./MetadataViewAPI";
 import BreadCrumbs from '../../common/components/BreadCrumbs';
 import MetadataViewContext from "./MetadataViewContext";
@@ -73,6 +76,32 @@ export const MetadataView = (props: MetadataViewProperties) => {
     const applyFilters = () => {
         updateFilters(filterCandidates);
         clearFilterCandidates();
+    };
+
+    const exportData = async () => {
+        const LOCATION_FILTER_FIELD = 'location';
+        const locationFilter: MetadataViewFilter = {
+            field: LOCATION_FILTER_FIELD,
+            values: [locationContext]
+        };
+
+        if (currentView) {
+            const token = axios.CancelToken.source();
+            console.log(locationContext);
+            MetadataViewAPI.getViewExportData(token, currentView.name, 0, 10_000, [...filters, locationFilter])
+                .then(async (dd) => {
+                    const csv = parse(dd.rows);
+                    const decodeURi = window.decodeURI(csv);
+                    const fileHandle = await window.showSaveFilePicker();
+                    console.log(fileHandle.name);
+                    const fileStream = await fileHandle.createWritable();
+                    await fileStream.write(decodeURi);
+                    await fileStream.close();
+                })
+                .catch((e) => {
+                    console.error(e || new Error('Unknown error storing export data'));
+                });
+        }
     };
 
     const getFilterValues = (type: ValueType, filter: MetadataViewFilter): any[] => {
@@ -175,7 +204,7 @@ export const MetadataView = (props: MetadataViewProperties) => {
     const renderFacetConfirmButtons = (
         <Grid
             container
-            spacing={1}
+            spacing={2}
             className={`${classes.confirmFiltersButtonBlock} ${filterCandidates.length > 0 && classes.confirmFiltersButtonBlockActive}`}
         >
             <Grid item xs={4}>
@@ -198,6 +227,16 @@ export const MetadataView = (props: MetadataViewProperties) => {
                     disabled={filterCandidates.length === 0}
                 >
                     Apply filters
+                </Button>
+            </Grid>
+            <Grid item xs={12}>
+                <Button
+                    onClick={exportData}
+                    variant="contained"
+                    color="secondary"
+                    className={classes.confirmFiltersButton}
+                >
+                    Export Data
                 </Button>
             </Grid>
         </Grid>
