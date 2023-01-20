@@ -1,10 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {parse} from 'json2csv';
 import _ from 'lodash';
 import {useHistory} from "react-router-dom";
 import {Button, Grid, Typography, withStyles} from '@material-ui/core';
 import Tabs from "@material-ui/core/Tabs";
-import axios from "axios";
+// import axios from "axios";
 import Tab from "@material-ui/core/Tab";
 import {Assignment, Close} from "@material-ui/icons";
 import styles from "./MetadataView.styles";
@@ -79,27 +78,13 @@ export const MetadataView = (props: MetadataViewProperties) => {
     };
 
     const exportData = async () => {
-        const LOCATION_FILTER_FIELD = 'location';
-        const locationFilter: MetadataViewFilter = {
-            field: LOCATION_FILTER_FIELD,
-            values: [locationContext]
-        };
-
         if (currentView) {
-            const token = axios.CancelToken.source();
-            console.log(locationContext);
-            MetadataViewAPI.getViewExportData(token, currentView.name, 0, 10_000, [...filters, locationFilter])
-                .then(async (dd) => {
-                    const csv = parse(dd.rows);
-                    const decodeURi = window.decodeURI(csv);
+            MetadataViewAPI.getExportData(currentView.name, filters, locationContext)
+                .then(async (theData) => {
                     const fileHandle = await window.showSaveFilePicker();
-                    console.log(fileHandle.name);
                     const fileStream = await fileHandle.createWritable();
-                    await fileStream.write(decodeURi);
+                    await fileStream.write(theData);
                     await fileStream.close();
-                })
-                .catch((e) => {
-                    console.error(e || new Error('Unknown error storing export data'));
                 });
         }
     };

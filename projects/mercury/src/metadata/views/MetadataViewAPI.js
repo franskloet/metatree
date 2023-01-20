@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import axios, {CancelTokenSource} from "axios";
+import {parse} from 'json2csv';
 import {extractJsonData, handleHttpError} from "../../common/utils/httpUtils";
 import type {AccessLevel} from "../../users/userUtils";
 
@@ -106,6 +107,26 @@ class MetadataViewAPI {
         return axios.post(metadataViewUrl, viewRequest, requestOptions)
             .then(extractJsonData)
             .catch(handleHttpError("Error while fetching export data."));
+    }
+
+    async getExportData(viewName: string, filters: MetadataViewFilter[] = [], locationContext:string): Promise<string> {
+        const token = axios.CancelToken.source();
+        const LOCATION_FILTER_FIELD = 'location';
+        const locationFilter: MetadataViewFilter = {
+            field: LOCATION_FILTER_FIELD,
+            values: [locationContext]
+        };
+        const locFilter = locationContext ? [...filters, locationFilter] : filters;
+        const dd = await this.getViewExportData(token, viewName, 0, 10_000, locFilter);
+        if (dd) {
+            // const fields = ['label'];
+            // const opts = {fields};
+            // const csv = parse(dd.rows, opts);
+            const csv = parse(dd.rows);
+            const decodeURi = window.decodeURI(csv);
+            return decodeURi;
+        }
+        return "";
     }
 
     getViewData(cancelToken: CancelTokenSource, viewName: string, page, size, filters: MetadataViewFilter[] = []): Promise<MetadataViewData> {
