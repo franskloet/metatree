@@ -69,22 +69,26 @@ const styles = () => ({
     }
 });
 
+const OBJECT_VIEWS = ["Files", "Objects", "Samples"];
+
 const LOCAL_STORAGE_METADATA_TABLE_ROWS_NUM_KEY = 'FAIRSPACE_METADATA_TABLE_ROWS_NUM';
 const SESSION_STORAGE_VISIBLE_COLUMNS_KEY_PREFIX = 'FAIRSPACE_METADATA_VISIBLE_COLUMNS';
 
 export const MetadataViewTableContainer = (props: MetadataViewTableContainerProperties) => {
     const {view, filters, columns, hasInactiveFilters, locationContext, classes} = props;
     const {textFiltersObject, setTextFiltersObject} = props;
-
+    const showColumns = OBJECT_VIEWS.includes(view) ? columns : columns.filter(item => (item.name.indexOf("Assay") !== 0 && item.name.indexOf("Object") !== 0));
     const [page, setPage] = useState(0);
-    const [visibleColumnNames, setVisibleColumnNames] = useStateWithLocalStorage(
+    const [visibleColumnNamesStored, setVisibleColumnNames] = useStateWithLocalStorage(
         `${SESSION_STORAGE_VISIBLE_COLUMNS_KEY_PREFIX}_${view.toUpperCase()}`,
-        columns.map(c => c.name)
+        showColumns.map(c => c.name)
     );
+
+    const visibleColumnNames = OBJECT_VIEWS.includes(view) ? visibleColumnNamesStored : visibleColumnNamesStored.filter(item => (item.indexOf("Assay") !== 0 && item.indexOf("Object") !== 0));
     const [rowsPerPage, setRowsPerPage] = useStateWithLocalStorage(LOCAL_STORAGE_METADATA_TABLE_ROWS_NUM_KEY, 10);
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const idColumn = columns.find(c => c.type === 'Identifier'); // first column of id type
+    const idColumn = showColumns.find(c => c.type === 'Identifier'); // first column of id type
     const columnSelectorOpen = Boolean(anchorEl);
     const history = useHistory();
 
@@ -143,7 +147,7 @@ export const MetadataViewTableContainer = (props: MetadataViewTableContainerProp
                     Show/hide columns
                 </Typography>
                 <FormGroup>
-                    {columns.map((column) => (
+                    {showColumns.map((column) => (
                         <FormControlLabel
                             key={column.name}
                             control={(

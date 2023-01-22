@@ -1,6 +1,6 @@
 import type {ValueType} from "./MetadataViewAPI";
 
-export const RESOURCES_VIEW = ["Files", "Studies"];
+export const RESOURCES_VIEW = ["Files", "Studies", "Projects", "PrincipalInvestigators", "Objects"];
 
 export type MetadataViewEntity = {
     iri: string;
