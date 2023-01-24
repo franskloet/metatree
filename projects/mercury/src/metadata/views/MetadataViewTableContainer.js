@@ -18,6 +18,7 @@ import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import FormGroup from "@material-ui/core/FormGroup";
 import type {MetadataViewColumn, MetadataViewFilter} from "./MetadataViewAPI";
+import {OBJECT_VIEWS} from "./metadataViewUtils";
 import MessageDisplay from "../../common/components/MessageDisplay";
 import type {MetadataViewEntityWithLinkedFiles} from "./metadataViewUtils";
 import useViewData from "./UseViewData";
@@ -68,8 +69,6 @@ const styles = () => ({
         padding: 5
     }
 });
-
-const OBJECT_VIEWS = ["Files", "Objects", "Samples"];
 
 const LOCAL_STORAGE_METADATA_TABLE_ROWS_NUM_KEY = 'FAIRSPACE_METADATA_TABLE_ROWS_NUM';
 const SESSION_STORAGE_VISIBLE_COLUMNS_KEY_PREFIX = 'FAIRSPACE_METADATA_VISIBLE_COLUMNS';

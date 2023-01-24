@@ -3,6 +3,7 @@ import axios, {CancelTokenSource} from "axios";
 import {parse} from 'json2csv';
 import {extractJsonData, handleHttpError} from "../../common/utils/httpUtils";
 import type {AccessLevel} from "../../users/userUtils";
+import {OBJECT_VIEWS} from "./metadataViewUtils";
 
 export type ValueType = 'Identifier' | 'Text' | 'Link' | 'Number' | 'Date' | 'Term' | 'Set' | 'TermSet' | 'Boolean';
 export const TextualValueTypes: ValueType[] = ['Identifier', 'Text', 'Set', 'Link'];
@@ -111,20 +112,37 @@ class MetadataViewAPI {
 
     async getExportData(viewName: string, filters: MetadataViewFilter[] = [], locationContext:string): Promise<string> {
         const token = axios.CancelToken.source();
+        // check if were looking in a contextual enviroment
         const LOCATION_FILTER_FIELD = 'location';
         const locationFilter: MetadataViewFilter = {
             field: LOCATION_FILTER_FIELD,
             values: [locationContext]
         };
         const locFilter = locationContext ? [...filters, locationFilter] : filters;
-        const dd = await this.getViewExportData(token, viewName, 0, 10_000, locFilter);
-        if (dd) {
-            // const fields = ['label'];
-            // const opts = {fields};
-            // const csv = parse(dd.rows, opts);
-            const csv = parse(dd.rows);
-            const decodeURi = window.decodeURI(csv);
-            return decodeURi;
+        // 10_000 rows are downloaded by default .. this is the current limit
+        const downloadData = await this.getViewExportData(token, viewName, 0, 10_000, locFilter);
+        // rearrange data to only extract the label parts from the json structure
+        if (downloadData) {
+            const reMapped = Object.keys(downloadData.rows).map(key1 => {
+                // create temporary map per row
+                const rowMap = new Map();
+                Object.keys(downloadData.rows[key1]).forEach(key2 => {
+                    Object.keys(downloadData.rows[key1][key2]).forEach(key3 => {
+                        const colCheck = key2.indexOf("Assay") !== 0 && key2.indexOf("Object") !== 0;
+                        // only assign all values for specific views (similar to the table container)
+                        if (OBJECT_VIEWS.includes(viewName) || colCheck) {
+                            const values = downloadData.rows[key1][key2][key3].label;
+                            rowMap.set(key2, values);
+                        }
+                    });
+                });
+                return rowMap;
+            });
+            // generate json object
+            const reMappedArray = reMapped.map(item => Object.fromEntries(item));
+            // parse json structures
+            const csv = parse(reMappedArray);
+            return csv;
         }
         return "";
     }
