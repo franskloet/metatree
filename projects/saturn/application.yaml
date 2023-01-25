@@ -38,7 +38,7 @@ jena:
   bulkTransactions: true
 auth:
   authServerUrl: http://localhost:5100/auth/
-  realm: fairspace
+  realm: metatree
   clientId: workspace-client
   clientSecret: '**********'
   enableBasicAuth: true

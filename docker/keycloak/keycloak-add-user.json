@@ -1,5 +1,5 @@
 [ {
-  "realm" : "fairspace",
+  "realm" : "metatree",
   "users" : [ {
     "username" : "organisation-admin",
     "enabled" : true,

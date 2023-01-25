@@ -8,7 +8,7 @@ server.port: 9080
 pluto:
   domains:
     - ${METATREE_URL}
-  downstreamServiceHealthUrl: http://fairspace-saturn:8090/api/health/
+  downstreamServiceHealthUrl: http://metatree-saturn:8090/api/health/
   oauth2:
     base-url: ${KEYCLOAK_SERVER_URL}
     realm: ${KEYCLOAK_REALM}
@@ -43,7 +43,7 @@ zuul:
   routes:
     saturn:
       path: /api/**
-      url: http://fairspace-saturn:8090
+      url: http://metatree-saturn:8090
       strip-prefix: false
   add-proxy-headers: false
 EndOfMessage

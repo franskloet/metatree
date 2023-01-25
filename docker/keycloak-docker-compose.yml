@@ -1,30 +1,30 @@
 version: '3'
 
 services:
-  fairspace-keycloak-postgres:
+  metatree-keycloak-postgres:
     image: postgres:13-alpine
-    container_name: fairspace-keycloak-database
+    container_name: metatree-keycloak-database
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak
     volumes:
-      - fairspace-keycloak-postgres-data:/var/lib/postgresql/data
+      - metatree-keycloak-postgres-data:/var/lib/postgresql/data
     networks:
-      - fairspace-keycloak-db-network
+      - metatree-keycloak-db-network
     restart: unless-stopped
     logging:
       driver: ${DOCKER_LOGGING_DRIVER:-journald}
       options:
         labels: application
-        tag: fairspace-keycloak-postgres
+        tag: metatree-keycloak-postgres
 
-  fairspace-keycloak:
+  metatree-keycloak:
     image: jboss/keycloak:16.1.1
-    container_name: fairspace-keycloak
+    container_name: metatree-keycloak
     environment:
       DB_VENDOR: POSTGRES
-      DB_ADDR: fairspace-keycloak-postgres
+      DB_ADDR: metatree-keycloak-postgres
       DB_DATABASE: keycloak
       DB_USER: keycloak
       DB_PASSWORD: keycloak
@@ -39,9 +39,9 @@ services:
     ports:
       - ${KEYCLOAK_PORT:-8080}:8080
     depends_on:
-      - fairspace-keycloak-postgres
+      - metatree-keycloak-postgres
     networks:
-      - fairspace-keycloak-db-network
+      - metatree-keycloak-db-network
     volumes:
       - ./keycloak/setup-realm.sh:/opt/jboss/startup-scripts/setup-realm.sh
       - ./keycloak/realm-template.json:/tmp/realm-template.json
@@ -51,11 +51,11 @@ services:
       driver: ${DOCKER_LOGGING_DRIVER:-journald}
       options:
         labels: application
-        tag: fairspace-keycloak
+        tag: metatree-keycloak
 
 volumes:
-  fairspace-keycloak-postgres-data:
+  metatree-keycloak-postgres-data:
 
 networks:
-  fairspace-keycloak-db-network:
+  metatree-keycloak-db-network:
     driver: bridge

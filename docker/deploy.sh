@@ -23,9 +23,9 @@ popd
 pushd "${root}"
 
 echo "(4/4) Building the images..."
-(docker build fairspace-ssl-proxy -t fairspace-ssl-proxy-local:latest &&
-docker build ../projects/pluto -t pluto-local:latest &&
-docker build ../projects/saturn -t saturn-local:latest) || {
+(docker build fairspace-ssl-proxy -t metatree-ssl-proxy-local:latest &&
+docker build ../projects/pluto -t metatree-pluto:latest &&
+docker build ../projects/saturn -t metatree-saturn:latest) || {
   echo "Build failed."
   popd
   exit 1

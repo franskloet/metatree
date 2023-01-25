@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  fairspace-saturn:
+  metatree-saturn:
     image: ${SATURN_IMAGE}
-    container_name: fairspace-saturn
+    container_name: metatree-saturn
     environment:
       USE_DOCKERCOMPOSE: 'true'
       KEYCLOAK_SERVER_URL: ${KEYCLOAK_SERVER_URL:?Please configure KEYCLOAK_SERVER_URL}
@@ -25,15 +25,15 @@ services:
       driver: ${DOCKER_LOGGING_DRIVER:-journald}
       options:
         labels: application
-        tag: fairspace-saturn
+        tag: metatree-saturn
     networks:
       - nginx-proxy-network
     extra_hosts:
       - ${KEYCLOAK_HOSTNAME}:${DOCKER_HOST_IP}
 
-  fairspace-pluto:
+  metatree-pluto:
     image: ${PLUTO_IMAGE}
-    container_name: fairspace-pluto
+    container_name: metatree-pluto
     environment:
       USE_DOCKERCOMPOSE: 'true'
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:?Please configure KEYCLOAK_CLIENT_ID}
@@ -50,14 +50,14 @@ services:
       - 9080:9080
     restart: unless-stopped
     depends_on:
-      - fairspace-saturn
+      - metatree-saturn
     volumes:
       - ./ssl/extra_certs.pem:/opt/extra_certs.pem
     logging:
       driver: ${DOCKER_LOGGING_DRIVER:-journald}
       options:
         labels: application
-        tag: fairspace-pluto
+        tag: metatree-pluto
     networks:
       - nginx-proxy-network
     extra_hosts:

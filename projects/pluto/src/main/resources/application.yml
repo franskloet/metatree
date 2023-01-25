@@ -2,7 +2,7 @@ pluto:
   oauth2:
     base-url: http://localhost:5100
     backend-url: ${KEYCLOAK_BACKEND_URL:${pluto.oauth2.base-url}}
-    realm: fairspace
+    realm: metatree
 server:
   error:
     whitelabel:

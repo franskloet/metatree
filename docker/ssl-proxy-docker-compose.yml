@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  fairspace-ssl-proxy:
+  metatree-ssl-proxy:
     image: ${METATREE_SSL_PROXY_IMAGE}
-    container_name: fairspace-ssl-proxy
+    container_name: metatree-ssl-proxy
     environment:
       METATREE_HOSTNAME: ${METATREE_HOSTNAME:?Please configure METATREE_HOSTNAME.}
       KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
@@ -19,4 +19,4 @@ services:
       driver: ${DOCKER_LOGGING_DRIVER:-journald}
       options:
         labels: application
-        tag: fairspace-ssl-proxy
+        tag: metatree-ssl-proxy

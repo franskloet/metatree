@@ -50,7 +50,7 @@
         "description": "${role_offline-access}",
         "composite": false,
         "clientRole": false,
-        "containerId": "fairspace",
+        "containerId": "metatree",
         "attributes": {}
       },
       {
@@ -58,7 +58,7 @@
         "name": "view-public-metadata",
         "composite": false,
         "clientRole": false,
-        "containerId": "fairspace",
+        "containerId": "metatree",
         "attributes": {}
       },
       {
@@ -67,7 +67,7 @@
         "description": "${role_uma_authorization}",
         "composite": false,
         "clientRole": false,
-        "containerId": "fairspace",
+        "containerId": "metatree",
         "attributes": {}
       }
     ],
@@ -474,7 +474,7 @@
       "clientId": "account",
       "name": "${client_account}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/fairspace/account/",
+      "baseUrl": "/realms/metatree/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
@@ -485,7 +485,7 @@
         "view-profile"
       ],
       "redirectUris": [
-        "/realms/fairspace/account/*"
+        "/realms/metatree/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -521,14 +521,14 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/fairspace/account/",
+      "baseUrl": "/realms/metatree/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/realms/fairspace/account/*"
+        "/realms/metatree/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -798,14 +798,14 @@
       "clientId": "security-admin-console",
       "name": "${client_security-admin-console}",
       "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/fairspace/console/",
+      "baseUrl": "/admin/metatree/console/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/admin/fairspace/console/*"
+        "/admin/metatree/console/*"
       ],
       "webOrigins": [
         "+"

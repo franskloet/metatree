@@ -5,7 +5,7 @@ import {Assignment, Folder, FolderSpecial, OpenInNew, VerifiedUser} from "@mater
 import ServicesContext from "../common/contexts/ServicesContext";
 import UserContext from "../users/UserContext";
 // change from isAdmin to isSuperadmin by FK
-import {isSuperadmin, isAdmin} from "../users/userUtils";
+import {isSuperadmin} from "../users/userUtils";
 import MetadataViewContext from "../metadata/views/MetadataViewContext";
 import ExternalStoragesContext from "../external-storage/ExternalStoragesContext";
 import {getExternalStoragePathPrefix} from "../external-storage/externalStorageUtils";
@@ -81,7 +81,7 @@ export default () => {
                     </ListItem>
                 )}
 
-                {isAdmin(currentUser) && (
+                {/* {isAdmin(currentUser) && (
                     <ListItem
                         key="data"
                         component={NavLink}
@@ -94,7 +94,7 @@ export default () => {
                         </ListItemIcon>
                         <ListItemText primary="Data" />
                     </ListItem>
-                )}
+                )} */}
             </List>
 
             <div>
