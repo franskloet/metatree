@@ -78,13 +78,35 @@ export const MetadataView = (props: MetadataViewProperties) => {
     };
 
     const exportData = async () => {
-        if (currentView) {
-            MetadataViewAPI.getExportData(currentView.name, filters, locationContext)
+         MetadataViewAPI.getExportData(currentView.name, filters, locationContext)
                 .then(async (theData) => {
-                    const fileHandle = await window.showSaveFilePicker();
-                    const fileStream = await fileHandle.createWritable();
-                    await fileStream.write(theData);
-                    await fileStream.close();
+                    const sugName = "metatree_" + currentView.name + "_ouput.csv";
+                    // check for chrome based browsers first
+                    if (typeof window.showSaveFilePicker === "function") {
+                        const fileHandle = await window.showSaveFilePicker({
+                            suggestedName: sugName,
+                            types: [{
+                                description: 'csv files',
+                                accept: {
+                                    'text/csv': ['.csv'],
+                                },
+                            }],
+                        });
+                        const fileStream = await fileHandle.createWritable();
+                        await fileStream.write(theData);
+                        await fileStream.close();
+                    } else { // and firefox/safari browsers second
+                        const alnk = document.createElement("a");
+                        const filename = sugName;
+                        alnk.download = filename;
+                        const blob = new Blob([theData], {type: "text/csv"});
+                        alnk.href = window.URL.createObjectURL(blob);
+                        alnk.dataset.downloadUrl = ['text/csv', alnk.download, alnk.href].join(":");
+                        const evt = new MouseEvent('click', {
+                            view: window,
+                        });
+                        alnk.dispatchEvent(evt);
+                    }
                 });
         }
     };
