@@ -77,14 +77,43 @@ export const MetadataView = (props: MetadataViewProperties) => {
         clearFilterCandidates();
     };
 
+    const exportWithChrome = async (aData, aFileName) => {
+        const fileHandle = await window.showSaveFilePicker({
+            suggestedName: aFileName,
+            types: [{
+                description: 'csv files',
+                accept: {
+                    'text/csv': ['.csv'],
+                },
+            }],
+        });
+        const fileStream = await fileHandle.createWritable();
+        await fileStream.write(aData);
+        await fileStream.close();
+    };
+
+    const exportWithFirefox = async (aData, aFileName) => {
+        const alnk = document.createElement("a");
+        alnk.download = aFileName;
+        const blob = new Blob([aData], {type: "text/csv"});
+        alnk.href = window.URL.createObjectURL(blob);
+        alnk.dataset.downloadUrl = ['text/csv', alnk.download, alnk.href].join(":");
+        const evt = new MouseEvent('click', {
+            view: window,
+        });
+        alnk.dispatchEvent(evt);
+    };
+
     const exportData = async () => {
         if (currentView) {
             MetadataViewAPI.getExportData(currentView.name, filters, locationContext)
                 .then(async (theData) => {
-                    const fileHandle = await window.showSaveFilePicker();
-                    const fileStream = await fileHandle.createWritable();
-                    await fileStream.write(theData);
-                    await fileStream.close();
+                    const suggestedName = "metatree_" + currentView.name + "_ouput.csv";
+                    if (typeof window.showSaveFilePicker === "function") {
+                        exportWithChrome(theData, suggestedName);
+                    } else {
+                        exportWithFirefox(theData, suggestedName);
+                    }
                 });
         }
     };
